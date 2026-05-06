@@ -18,10 +18,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Fingerprint
-import androidx.compose.material.icons.outlined.FreeBreakfast
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -33,49 +31,39 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.telusdigital.pontomais.ui.theme.Iris
 import com.telusdigital.pontomais.ui.theme.Juniper
-import com.telusdigital.pontomais.ui.theme.Obsidian
-import com.telusdigital.pontomais.ui.theme.Orchid
 import com.telusdigital.pontomais.ui.theme.PontoMaisTheme
-import com.telusdigital.pontomais.ui.theme.Slate
 import com.telusdigital.pontomais.ui.theme.TelusPurple
-import com.telusdigital.pontomais.ui.theme.Verbena
-
-private val IdleBrush    = Brush.linearGradient(listOf(Iris, Verbena))
 
 @Composable
 fun HeroStatusCard(
     time: String,
     date: String,
     isWorking: Boolean,
-    nextActionLabel: String,
     onPunch: () -> Unit,
     modifier: Modifier = Modifier,
-    showPauseIcon: Boolean = false,
 ) {
-    val brush = if (isWorking) CaradonnaBrush else IdleBrush
-    val textColor = if (isWorking) Color.White else Obsidian
-
+    // Both states use the same Caradonna gradient — only the status pill differs.
     GradientCard(
-        brush    = brush,
+        brush    = CaradonnaBrush,
         modifier = modifier.fillMaxWidth(),
     ) {
         Column(modifier = Modifier.padding(24.dp)) {
-            // Status indicator
+            // Status pill
             Row(verticalAlignment = Alignment.CenterVertically) {
-                PulsingDot(active = isWorking)
+                StatusDot(active = isWorking)
                 Spacer(Modifier.width(8.dp))
                 Text(
                     text  = if (isWorking) "Trabalhando" else "Fora do expediente",
                     style = MaterialTheme.typography.labelSmall.copy(
-                        color = if (isWorking) Juniper else Slate,
-                        letterSpacing = androidx.compose.ui.unit.TextUnit(0.08f, androidx.compose.ui.unit.TextUnitType.Em),
+                        color = if (isWorking) Juniper else Color.White.copy(alpha = 0.85f),
+                        letterSpacing = androidx.compose.ui.unit.TextUnit(
+                            0.08f, androidx.compose.ui.unit.TextUnitType.Em
+                        ),
                     ),
                 )
             }
@@ -86,7 +74,7 @@ fun HeroStatusCard(
             Text(
                 text  = time,
                 style = MaterialTheme.typography.displayMedium.copy(
-                    color = textColor,
+                    color = Color.White,
                     letterSpacing = (-0.03f).let {
                         androidx.compose.ui.unit.TextUnit(it, androidx.compose.ui.unit.TextUnitType.Em)
                     },
@@ -94,20 +82,18 @@ fun HeroStatusCard(
             )
             Text(
                 text  = date,
-                style = MaterialTheme.typography.bodyMedium.copy(
-                    color = textColor.copy(alpha = 0.85f),
-                ),
+                style = MaterialTheme.typography.bodyMedium.copy(color = Color.White.copy(alpha = 0.85f)),
             )
 
             Spacer(Modifier.height(20.dp))
 
-            // Clock-in button
+            // "Bater ponto" — always white button, always fingerprint icon
             Button(
                 onClick = onPunch,
-                shape = CircleShape,
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = if (isWorking) Color.White else TelusPurple,
-                    contentColor   = if (isWorking) TelusPurple else Color.White,
+                shape   = CircleShape,
+                colors  = ButtonDefaults.buttonColors(
+                    containerColor = Color.White,
+                    contentColor   = TelusPurple,
                 ),
                 modifier = Modifier
                     .fillMaxWidth()
@@ -115,19 +101,19 @@ fun HeroStatusCard(
             ) {
                 Surface(
                     shape = CircleShape,
-                    color = if (isWorking) TelusPurple else Color.White,
+                    color = TelusPurple,
                     modifier = Modifier.size(28.dp),
                 ) {
                     Icon(
-                        imageVector = if (showPauseIcon) Icons.Outlined.FreeBreakfast else Icons.Outlined.Fingerprint,
+                        imageVector = Icons.Outlined.Fingerprint,
                         contentDescription = null,
-                        tint = if (isWorking) Color.White else TelusPurple,
+                        tint = Color.White,
                         modifier = Modifier.padding(6.dp),
                     )
                 }
                 Spacer(Modifier.width(10.dp))
                 Text(
-                    text  = nextActionLabel,
+                    text  = "Bater ponto",
                     style = MaterialTheme.typography.labelLarge,
                 )
             }
@@ -136,12 +122,12 @@ fun HeroStatusCard(
 }
 
 @Composable
-private fun PulsingDot(active: Boolean) {
+private fun StatusDot(active: Boolean) {
     if (active) {
         val infiniteTransition = rememberInfiniteTransition(label = "pulse")
         val scale by infiniteTransition.animateFloat(
-            initialValue = 1f,
-            targetValue  = 1.5f,
+            initialValue  = 1f,
+            targetValue   = 1.5f,
             animationSpec = infiniteRepeatable(
                 animation  = tween(800, easing = LinearEasing),
                 repeatMode = RepeatMode.Reverse,
@@ -160,7 +146,7 @@ private fun PulsingDot(active: Boolean) {
             modifier = Modifier
                 .size(8.dp)
                 .clip(CircleShape)
-                .background(Slate),
+                .background(Color.White.copy(alpha = 0.6f)),
         )
     }
 }
@@ -170,12 +156,11 @@ private fun PulsingDot(active: Boolean) {
 private fun HeroStatusCardIdlePreview() {
     PontoMaisTheme {
         HeroStatusCard(
-            time             = "14:32",
-            date             = "terça-feira, 6 de maio",
-            isWorking        = false,
-            nextActionLabel  = "Iniciar expediente",
-            onPunch          = {},
-            modifier         = Modifier.padding(16.dp),
+            time      = "18:15",
+            date      = "quarta-feira, 6 de maio",
+            isWorking = false,
+            onPunch   = {},
+            modifier  = Modifier.padding(16.dp),
         )
     }
 }
@@ -185,13 +170,11 @@ private fun HeroStatusCardIdlePreview() {
 private fun HeroStatusCardWorkingPreview() {
     PontoMaisTheme {
         HeroStatusCard(
-            time             = "14:32",
-            date             = "terça-feira, 6 de maio",
-            isWorking        = true,
-            nextActionLabel  = "Iniciar pausa",
-            onPunch          = {},
-            showPauseIcon    = true,
-            modifier         = Modifier.padding(16.dp),
+            time      = "18:12",
+            date      = "quarta-feira, 6 de maio",
+            isWorking = true,
+            onPunch   = {},
+            modifier  = Modifier.padding(16.dp),
         )
     }
 }

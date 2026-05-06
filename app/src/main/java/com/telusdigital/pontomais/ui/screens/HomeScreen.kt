@@ -1,7 +1,9 @@
 package com.telusdigital.pontomais.ui.screens
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -23,7 +25,6 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -35,10 +36,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.telusdigital.pontomais.ui.components.CaradonnaBrush
 import com.telusdigital.pontomais.ui.components.HeroStatusCard
 import com.telusdigital.pontomais.ui.components.NotificationIconButton
 import com.telusdigital.pontomais.ui.components.PontoBottomNavBar
@@ -46,11 +50,9 @@ import com.telusdigital.pontomais.ui.components.PontoTab
 import com.telusdigital.pontomais.ui.components.PontoTopAppBar
 import com.telusdigital.pontomais.ui.components.PunchRow
 import com.telusdigital.pontomais.ui.components.PunchType
-import com.telusdigital.pontomais.ui.components.ScheduleCard
 import com.telusdigital.pontomais.ui.components.StatCard
 import com.telusdigital.pontomais.ui.theme.Marble
 import com.telusdigital.pontomais.ui.theme.Obsidian
-import com.telusdigital.pontomais.ui.theme.Orchid
 import com.telusdigital.pontomais.ui.theme.Pearl
 import com.telusdigital.pontomais.ui.theme.PontoMaisTheme
 import com.telusdigital.pontomais.ui.theme.Slate
@@ -80,29 +82,24 @@ fun HomeScreen(
         }
     }
 
-    val today     = LocalDate.now()
-    val ptBr      = Locale.forLanguageTag("pt-BR")
-    val dayName   = today.dayOfWeek.getDisplayName(TextStyle.FULL, ptBr)
-    val dateLong  = "$dayName, ${today.dayOfMonth} de ${today.month.getDisplayName(TextStyle.FULL, ptBr)}"
+    val ptBr     = Locale.forLanguageTag("pt-BR")
+    val today    = LocalDate.now()
+    val dayName  = today.dayOfWeek.getDisplayName(TextStyle.FULL, ptBr)
+    val dateLong = "$dayName, ${today.dayOfMonth} de ${today.month.getDisplayName(TextStyle.FULL, ptBr)}"
 
-    val isWorking  = state.punches.isNotEmpty() && state.punches.last().type != PunchType.Out
-    val nextLabel  = when {
-        !isWorking                -> "Iniciar expediente"
-        state.punches.size == 1  -> "Iniciar pausa"
-        state.punches.size == 2  -> "Voltar da pausa"
-        else                     -> "Encerrar expediente"
-    }
-    val showPause = state.punches.size == 1 && isWorking
+    val isWorking = state.punches.isNotEmpty() && state.punches.last().type != PunchType.Out
+
+    // "Batidas de hoje": only first Entrada and last Saída
+    val entrada  = state.punches.firstOrNull { it.type == PunchType.In }
+    val saida    = state.punches.lastOrNull  { it.type == PunchType.Out }
+    val visiblePunches = listOfNotNull(entrada, saida)
 
     Scaffold(
         topBar = {
             PontoTopAppBar(
-                title = "Olá, Ana",
-                navigationIcon = null,
-                actions = {
-                    AvatarInitials("AS")
-                    NotificationIconButton(badgeCount = 2)
-                },
+                title          = "Olá, Ana",
+                leadingContent = { AvatarInitials("AS") },
+                actions        = { NotificationIconButton(badgeCount = 2) },
             )
         },
         bottomBar = {
@@ -116,20 +113,18 @@ fun HomeScreen(
                 .padding(innerPadding)
                 .verticalScroll(rememberScrollState()),
         ) {
-            // Hero
+            // Hero card
             HeroStatusCard(
-                time            = currentTime,
-                date            = dateLong,
-                isWorking       = isWorking,
-                nextActionLabel = nextLabel,
-                onPunch         = vm::punch,
-                showPauseIcon   = showPause,
-                modifier        = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+                time      = currentTime,
+                date      = dateLong,
+                isWorking = isWorking,
+                onPunch   = vm::punch,
+                modifier  = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
             )
 
-            // Stats
+            // Stat cards
             Row(
-                modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
+                modifier              = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
             ) {
                 StatCard(
@@ -150,22 +145,22 @@ fun HomeScreen(
 
             Spacer(Modifier.height(8.dp))
 
-            // Today's punches
+            // Batidas de hoje — Entrada + Saída only
             Column(modifier = Modifier.padding(horizontal = 16.dp)) {
                 Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically,
+                    modifier              = Modifier.fillMaxWidth(),
+                    verticalAlignment     = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
                     Text(
                         text  = "Batidas de hoje",
                         style = MaterialTheme.typography.titleSmall.copy(
-                            fontWeight = androidx.compose.ui.text.font.FontWeight.Bold,
-                            color = Obsidian,
+                            fontWeight = FontWeight.Bold,
+                            color      = Obsidian,
                         ),
                     )
                     TextButton(
-                        onClick = { onNavigate(PontoTab.History) },
+                        onClick        = { onNavigate(PontoTab.History) },
                         contentPadding = PaddingValues(horizontal = 4.dp),
                     ) {
                         Text(
@@ -175,7 +170,7 @@ fun HomeScreen(
                         Icon(
                             imageVector = Icons.Outlined.ChevronRight,
                             contentDescription = null,
-                            tint = TelusPurple,
+                            tint     = TelusPurple,
                             modifier = Modifier.size(14.dp),
                         )
                     }
@@ -184,37 +179,25 @@ fun HomeScreen(
                 Spacer(Modifier.height(8.dp))
 
                 Card(
-                    shape = RoundedCornerShape(16.dp),
-                    colors = CardDefaults.cardColors(containerColor = Color.White),
-                    border = BorderStroke(1.dp, Marble),
+                    shape     = RoundedCornerShape(16.dp),
+                    colors    = CardDefaults.cardColors(containerColor = Color.White),
+                    border    = BorderStroke(1.dp, Marble),
                     elevation = CardDefaults.cardElevation(0.dp),
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier  = Modifier.fillMaxWidth(),
                 ) {
-                    if (state.punches.isEmpty()) {
+                    if (visiblePunches.isEmpty()) {
                         Text(
-                            text  = "Nenhuma batida registrada ainda.",
-                            style = MaterialTheme.typography.bodySmall.copy(color = Slate),
+                            text     = "Nenhuma batida registrada ainda.",
+                            style    = MaterialTheme.typography.bodySmall.copy(color = Slate),
                             modifier = Modifier.padding(horizontal = 16.dp, vertical = 32.dp),
                         )
                     } else {
-                        state.punches.forEachIndexed { i, punch ->
-                            PunchRow(
-                                punch = punch,
-                                showDivider = i < state.punches.size - 1,
-                            )
+                        visiblePunches.forEachIndexed { i, punch ->
+                            PunchRow(punch = punch, showDivider = i < visiblePunches.size - 1)
                         }
                     }
                 }
             }
-
-            Spacer(Modifier.height(12.dp))
-
-            // Schedule
-            ScheduleCard(
-                schedule = "Segunda a sexta · 09:00 às 18:00",
-                detail   = "1h de almoço · Híbrido (3 dias presencial)",
-                modifier = Modifier.padding(horizontal = 16.dp),
-            )
 
             Spacer(Modifier.height(24.dp))
         }
@@ -223,22 +206,21 @@ fun HomeScreen(
 
 @Composable
 private fun AvatarInitials(initials: String) {
-    Surface(
-        shape = CircleShape,
-        color = TelusPurple,
+    Box(
+        contentAlignment = Alignment.Center,
         modifier = Modifier
             .padding(start = 12.dp)
-            .size(40.dp),
+            .size(40.dp)
+            .clip(CircleShape)
+            .background(CaradonnaBrush),
     ) {
-        androidx.compose.foundation.layout.Box(contentAlignment = Alignment.Center) {
-            Text(
-                text  = initials,
-                style = MaterialTheme.typography.labelMedium.copy(
-                    color = Color.White,
-                    fontWeight = androidx.compose.ui.text.font.FontWeight.Bold,
-                ),
-            )
-        }
+        Text(
+            text  = initials,
+            style = MaterialTheme.typography.labelMedium.copy(
+                color      = Color.White,
+                fontWeight = FontWeight.Bold,
+            ),
+        )
     }
 }
 

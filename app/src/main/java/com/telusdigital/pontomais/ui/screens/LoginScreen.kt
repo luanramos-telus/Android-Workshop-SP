@@ -38,7 +38,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.telusdigital.pontomais.ui.components.CaradonnaBrush
+import com.telusdigital.pontomais.ui.components.CaradonnaVerticalBrush
 import com.telusdigital.pontomais.ui.components.GradientCard
 import com.telusdigital.pontomais.ui.components.PontoButton
 import com.telusdigital.pontomais.ui.components.PontoOutlinedButton
@@ -56,7 +56,7 @@ fun LoginScreen(onLogin: () -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(CaradonnaBrush),
+            .background(CaradonnaVerticalBrush),
     ) {
         Column(
             modifier = Modifier

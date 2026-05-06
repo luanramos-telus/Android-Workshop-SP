@@ -10,6 +10,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
@@ -19,8 +20,15 @@ import com.telusdigital.pontomais.ui.theme.Orchid
 import com.telusdigital.pontomais.ui.theme.PontoMaisTheme
 import com.telusdigital.pontomais.ui.theme.TelusPurple
 
-// Caradonna gradient: Orchid → TELUS Purple — used on all hero cards.
+// Caradonna gradient: Orchid → TELUS Purple, diagonal (≈ 135°) — hero cards.
 val CaradonnaBrush = Brush.linearGradient(
+    colors = listOf(Orchid, TelusPurple),
+    start  = Offset(0f, 0f),
+    end    = Offset(Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY),
+)
+
+// Vertical variant (180°) — used for full-screen backgrounds like Login.
+val CaradonnaVerticalBrush = Brush.verticalGradient(
     colors = listOf(Orchid, TelusPurple),
 )
 

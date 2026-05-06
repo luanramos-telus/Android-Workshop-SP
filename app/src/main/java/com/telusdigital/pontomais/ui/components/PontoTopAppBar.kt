@@ -1,7 +1,5 @@
 package com.telusdigital.pontomais.ui.components
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.Notifications
@@ -15,11 +13,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.telusdigital.pontomais.ui.theme.PontoMaisTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -27,31 +23,34 @@ import com.telusdigital.pontomais.ui.theme.PontoMaisTheme
 fun PontoTopAppBar(
     title: String,
     modifier: Modifier = Modifier,
+    // Pass either an icon (back arrow) or a fully custom composable (avatar).
     navigationIcon: ImageVector? = null,
+    leadingContent: @Composable (() -> Unit)? = null,
     onNavigationClick: () -> Unit = {},
     actions: @Composable () -> Unit = {},
 ) {
     TopAppBar(
         title = {
             Text(
-                text = title,
+                text  = title,
                 style = MaterialTheme.typography.titleLarge,
             )
         },
         modifier = modifier,
         navigationIcon = {
-            if (navigationIcon != null) {
-                IconButton(onClick = onNavigationClick) {
+            when {
+                leadingContent != null -> leadingContent()
+                navigationIcon != null -> IconButton(onClick = onNavigationClick) {
                     Icon(imageVector = navigationIcon, contentDescription = "Voltar")
                 }
             }
         },
         actions = { actions() },
         colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = MaterialTheme.colorScheme.background,
-            titleContentColor = MaterialTheme.colorScheme.onBackground,
+            containerColor          = MaterialTheme.colorScheme.background,
+            titleContentColor       = MaterialTheme.colorScheme.onBackground,
             navigationIconContentColor = MaterialTheme.colorScheme.onBackground,
-            actionIconContentColor = MaterialTheme.colorScheme.onBackground,
+            actionIconContentColor  = MaterialTheme.colorScheme.onBackground,
         ),
     )
 }
@@ -61,17 +60,10 @@ fun NotificationIconButton(badgeCount: Int = 0, onClick: () -> Unit = {}) {
     IconButton(onClick = onClick) {
         BadgedBox(
             badge = {
-                if (badgeCount > 0) {
-                    Badge {
-                        Text(badgeCount.toString())
-                    }
-                }
-            }
+                if (badgeCount > 0) Badge { Text(badgeCount.toString()) }
+            },
         ) {
-            Icon(
-                imageVector = Icons.Outlined.Notifications,
-                contentDescription = "Notificações",
-            )
+            Icon(imageVector = Icons.Outlined.Notifications, contentDescription = "Notificações")
         }
     }
 }
@@ -81,7 +73,7 @@ fun NotificationIconButton(badgeCount: Int = 0, onClick: () -> Unit = {}) {
 private fun PontoTopAppBarPreview() {
     PontoMaisTheme {
         PontoTopAppBar(
-            title = "Olá, Ana",
+            title   = "Olá, Ana",
             actions = { NotificationIconButton(badgeCount = 2) },
         )
     }
@@ -92,7 +84,7 @@ private fun PontoTopAppBarPreview() {
 private fun PontoTopAppBarWithBackPreview() {
     PontoMaisTheme {
         PontoTopAppBar(
-            title = "Histórico",
+            title          = "Histórico",
             navigationIcon = Icons.AutoMirrored.Outlined.ArrowBack,
         )
     }
