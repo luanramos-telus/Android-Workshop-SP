@@ -12,44 +12,97 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
+
+private val displayFmt = DateTimeFormatter.ofPattern("HH:mm")
+
+// Internal record — holds actual LocalTime for duration math.
+private data class PunchRecord(
+    val type: PunchType,
+    val time: LocalTime,
+    val location: String = "Escritório · POA",
+    val synced: Boolean = true,
+)
 
 data class HomeUiState(
-    val punches: List<PunchEntry> = listOf(
-        PunchEntry(PunchType.In,    "09:02", "Escritório · POA", synced = true),
-        PunchEntry(PunchType.Pause, "12:30", "Escritório · POA", synced = true),
-        PunchEntry(PunchType.Back,  "13:31", "Escritório · POA", synced = true),
-    ),
-    val workedToday: String = "06:42",
+    val punches: List<PunchEntry> = emptyList(),
+    val workedToday: String = "00:00",
     val hoursBalance: String = "+12:38",
 )
 
-private val punchOrder = listOf(PunchType.In, PunchType.Pause, PunchType.Back, PunchType.Out)
-private val timeFmt    = DateTimeFormatter.ofPattern("HH:mm")
-
 class HomeViewModel : ViewModel() {
+
+    private val records = mutableListOf<PunchRecord>()
 
     private val _uiState = MutableStateFlow(HomeUiState())
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
 
-    fun punch() {
-        val current = _uiState.value.punches
-        val nextType = if (current.size >= punchOrder.size) {
-            PunchType.In
-        } else {
-            punchOrder[current.size]
-        }
-        val time = LocalTime.now().format(timeFmt)
-        val newEntry = PunchEntry(nextType, time, "Escritório · POA", synced = false)
-        val newList  = if (current.size >= punchOrder.size) listOf(newEntry) else current + newEntry
-
-        _uiState.update { it.copy(punches = newList) }
-
-        // Simulate sync after 1.2 s
+    init {
+        // Refresh worked time every 30 s while the user is clocked in.
         viewModelScope.launch {
-            delay(1200)
-            _uiState.update { state ->
-                state.copy(punches = state.punches.map { it.copy(synced = true) })
+            while (true) {
+                delay(30_000)
+                if (isWorking()) refreshState()
             }
         }
     }
+
+    fun punch() {
+        // Simple toggle: last was Out (or empty) → Entrada; last was In → Saída.
+        // No limit and no clearing — list grows indefinitely.
+        val nextType = if (records.lastOrNull()?.type == PunchType.In) PunchType.Out else PunchType.In
+
+        records += PunchRecord(type = nextType, time = LocalTime.now(), synced = false)
+        refreshState()
+
+        viewModelScope.launch {
+            delay(1_200)
+            val idx = records.indices.last
+            records[idx] = records[idx].copy(synced = true)
+            refreshState()
+        }
+    }
+
+    private fun isWorking(): Boolean = records.lastOrNull()?.type == PunchType.In
+
+    private fun refreshState() {
+        _uiState.update {
+            it.copy(
+                punches     = records.map { r -> r.toEntry() },
+                workedToday = workedMinutes().formatDuration(),
+            )
+        }
+    }
+
+    private fun workedMinutes(): Long {
+        var total = 0L
+        var segStart: LocalTime? = null
+
+        for (r in records) {
+            when (r.type) {
+                PunchType.In  -> segStart = r.time
+                PunchType.Out -> {
+                    segStart?.let { total += ChronoUnit.MINUTES.between(it, r.time) }
+                    segStart = null
+                }
+                else -> Unit
+            }
+        }
+        // Open segment — currently working.
+        segStart?.let { total += ChronoUnit.MINUTES.between(it, LocalTime.now()) }
+        return total
+    }
+
+    private fun Long.formatDuration(): String {
+        val h = this / 60
+        val m = this % 60
+        return "%02d:%02d".format(h, m)
+    }
+
+    private fun PunchRecord.toEntry() = PunchEntry(
+        type     = type,
+        time     = time.format(displayFmt),
+        location = location,
+        synced   = synced,
+    )
 }

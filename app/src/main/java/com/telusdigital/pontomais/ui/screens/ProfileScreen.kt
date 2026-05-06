@@ -109,7 +109,7 @@ fun ProfileScreen(
                     ) {
                         Box(contentAlignment = Alignment.Center) {
                             Text(
-                                text  = "AS",
+                                text  = "LR",
                                 style = MaterialTheme.typography.headlineSmall.copy(
                                     color = TelusPurple,
                                     fontWeight = FontWeight.Bold,
@@ -120,7 +120,7 @@ fun ProfileScreen(
 
                     Column(modifier = Modifier.weight(1f)) {
                         Text(
-                            text  = "Ana Silva",
+                            text  = "Luan Ramos",
                             style = MaterialTheme.typography.titleLarge.copy(color = Color.White),
                         )
                         Text(

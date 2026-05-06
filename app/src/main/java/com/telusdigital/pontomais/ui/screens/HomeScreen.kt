@@ -64,7 +64,7 @@ import java.time.format.DateTimeFormatter
 import java.time.format.TextStyle
 import java.util.Locale
 
-private val timeFmt = DateTimeFormatter.ofPattern("HH:mm")
+private val clockFmt = DateTimeFormatter.ofPattern("HH:mm")
 
 @Composable
 fun HomeScreen(
@@ -74,11 +74,11 @@ fun HomeScreen(
 ) {
     val state by vm.uiState.collectAsState()
 
-    var currentTime by remember { mutableStateOf(LocalTime.now().format(timeFmt)) }
+    var currentTime by remember { mutableStateOf(LocalTime.now().format(clockFmt)) }
     LaunchedEffect(Unit) {
         while (true) {
-            delay(30_000)
-            currentTime = LocalTime.now().format(timeFmt)
+            delay(60_000)
+            currentTime = LocalTime.now().format(clockFmt)
         }
     }
 
@@ -89,16 +89,14 @@ fun HomeScreen(
 
     val isWorking = state.punches.isNotEmpty() && state.punches.last().type != PunchType.Out
 
-    // "Batidas de hoje": only first Entrada and last Saída
-    val entrada  = state.punches.firstOrNull { it.type == PunchType.In }
-    val saida    = state.punches.lastOrNull  { it.type == PunchType.Out }
-    val visiblePunches = listOfNotNull(entrada, saida)
+    // Every tap adds a row — Entrada, Início pausa, Volta pausa, Saída.
+    val visiblePunches = state.punches
 
     Scaffold(
         topBar = {
             PontoTopAppBar(
-                title          = "Olá, Ana",
-                leadingContent = { AvatarInitials("AS") },
+                title          = "Olá, Luan",
+                leadingContent = { AvatarInitials("LR") },
                 actions        = { NotificationIconButton(badgeCount = 2) },
             )
         },
