@@ -22,8 +22,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.telusdigital.pontomais.R
 import com.telusdigital.pontomais.ui.components.DayEntry
 import com.telusdigital.pontomais.ui.components.DayRow
 import com.telusdigital.pontomais.ui.components.DayStatus
@@ -63,12 +65,16 @@ fun HistoryScreen(
     currentTab: PontoTab = PontoTab.History,
 ) {
     var filter by remember { mutableStateOf("week") }
-    val chipFilters = listOf("week" to "Esta semana", "month" to "Este mês", "custom" to "Personalizado")
+    val chipFilters = listOf(
+        "week"   to stringResource(R.string.history_filter_this_week),
+        "month"  to stringResource(R.string.history_filter_this_month),
+        "custom" to stringResource(R.string.history_filter_custom),
+    )
 
     Scaffold(
         topBar = {
             PontoTopAppBar(
-                title = "Histórico",
+                title = stringResource(R.string.history_title),
                 navigationIcon = Icons.AutoMirrored.Outlined.ArrowBack,
                 onNavigationClick = onBack,
                 actions = {

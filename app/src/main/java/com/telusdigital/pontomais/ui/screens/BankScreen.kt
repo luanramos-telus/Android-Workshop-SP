@@ -33,6 +33,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -52,6 +53,7 @@ import com.telusdigital.pontomais.ui.theme.Pearl
 import com.telusdigital.pontomais.ui.theme.PontoMaisTheme
 import com.telusdigital.pontomais.ui.theme.Slate
 import com.telusdigital.pontomais.ui.theme.TelusPurple
+import com.telusdigital.pontomais.R
 
 private val sampleMovements = listOf(
     Movement(MovementType.Credit, "Hora extra · ter",  "5 mai 2026",  "+00:32"),
@@ -71,12 +73,12 @@ fun BankScreen(
     Scaffold(
         topBar = {
             PontoTopAppBar(
-                title             = "Banco de horas",
+                title             = stringResource(R.string.bank_title),
                 navigationIcon    = Icons.AutoMirrored.Outlined.ArrowBack,
                 onNavigationClick = onBack,
                 actions = {
                     IconButton(onClick = {}) {
-                        Icon(imageVector = Icons.AutoMirrored.Outlined.HelpOutline, contentDescription = "Ajuda")
+                        Icon(imageVector = Icons.AutoMirrored.Outlined.HelpOutline, contentDescription = null)
                     }
                 },
             )
@@ -96,7 +98,7 @@ fun BankScreen(
             GradientCard(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)) {
                 Column(modifier = Modifier.padding(24.dp)) {
                     Text(
-                        text  = "SALDO ATUAL",
+                        text  = stringResource(R.string.bank_balance_overline),
                         style = MaterialTheme.typography.labelSmall.copy(
                             color = Juniper,
                             letterSpacing = androidx.compose.ui.unit.TextUnit(0.08f, androidx.compose.ui.unit.TextUnitType.Em),
@@ -115,7 +117,7 @@ fun BankScreen(
                         )
                         Spacer(Modifier.width(8.dp))
                         Text(
-                            text  = "horas",
+                            text  = stringResource(R.string.bank_balance_unit),
                             style = MaterialTheme.typography.titleMedium.copy(color = Color.White.copy(alpha = 0.7f)),
                             modifier = Modifier.padding(bottom = 8.dp),
                         )
@@ -127,7 +129,7 @@ fun BankScreen(
                     Spacer(Modifier.height(20.dp))
                     Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                         PontoButton(
-                            label          = "Solicitar folga",
+                            label          = stringResource(R.string.bank_request_vacation),
                             onClick        = {},
                             icon           = Icons.Outlined.CalendarMonth,
                             containerColor = Color.White,
@@ -135,7 +137,7 @@ fun BankScreen(
                             modifier       = Modifier.weight(1f),
                         )
                         PontoOutlinedButton(
-                            label        = "Ver projeção",
+                            label        = stringResource(R.string.bank_see_projection),
                             onClick      = {},
                             icon         = Icons.AutoMirrored.Outlined.TrendingUp,
                             borderColor  = Color.White.copy(alpha = 0.3f),
@@ -162,7 +164,7 @@ fun BankScreen(
                     ) {
                         Column {
                             Text(
-                                text  = "CICLO ATUAL",
+                                text  = stringResource(R.string.bank_cycle_overline),
                                 style = MaterialTheme.typography.labelSmall.copy(
                                     color = TelusPurple,
                                     letterSpacing = androidx.compose.ui.unit.TextUnit(0.08f, androidx.compose.ui.unit.TextUnitType.Em),
@@ -191,7 +193,7 @@ fun BankScreen(
                         horizontalArrangement = Arrangement.SpaceBetween,
                     ) {
                         Text("0h",       style = MaterialTheme.typography.labelSmall.copy(color = Slate))
-                        Text("Limite 40h", style = MaterialTheme.typography.labelSmall.copy(color = Obsidian, fontWeight = FontWeight.SemiBold))
+                        Text(stringResource(R.string.bank_cycle_limit), style = MaterialTheme.typography.labelSmall.copy(color = Obsidian, fontWeight = FontWeight.SemiBold))
                         Text("80h",      style = MaterialTheme.typography.labelSmall.copy(color = Slate))
                     }
                 }
@@ -204,11 +206,11 @@ fun BankScreen(
                 verticalAlignment     = Alignment.CenterVertically,
             ) {
                 Text(
-                    text  = "Movimentações",
+                    text  = stringResource(R.string.bank_movements_title),
                     style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold, color = Obsidian),
                 )
                 TextButton(onClick = {}) {
-                    Text("Ver todas", style = MaterialTheme.typography.bodySmall.copy(color = TelusPurple))
+                    Text(stringResource(R.string.bank_movements_see_all), style = MaterialTheme.typography.bodySmall.copy(color = TelusPurple))
                 }
             }
 

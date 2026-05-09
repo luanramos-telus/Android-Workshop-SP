@@ -42,9 +42,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.telusdigital.pontomais.R
 import com.telusdigital.pontomais.ui.components.GradientCard
 import com.telusdigital.pontomais.ui.components.PontoBottomNavBar
 import com.telusdigital.pontomais.ui.components.PontoTab
@@ -74,12 +76,12 @@ fun ProfileScreen(
     Scaffold(
         topBar = {
             PontoTopAppBar(
-                title             = "Perfil",
+                title             = stringResource(R.string.profile_title),
                 navigationIcon    = Icons.AutoMirrored.Outlined.ArrowBack,
                 onNavigationClick = onBack,
                 actions = {
                     IconButton(onClick = {}) {
-                        Icon(imageVector = Icons.Outlined.Settings, contentDescription = "Configurações")
+                        Icon(imageVector = Icons.Outlined.Settings, contentDescription = stringResource(R.string.profile_settings_cd))
                     }
                 },
             )
@@ -124,7 +126,7 @@ fun ProfileScreen(
                             style = MaterialTheme.typography.titleLarge.copy(color = Color.White),
                         )
                         Text(
-                            text  = "Sr. Product Designer",
+                            text  = "Sr. Software Engineer",
                             style = MaterialTheme.typography.bodySmall.copy(color = Color.White.copy(alpha = 0.78f)),
                         )
                         Spacer(Modifier.height(4.dp))
@@ -169,29 +171,29 @@ fun ProfileScreen(
             Spacer(Modifier.height(12.dp))
 
             // ── Sections ──────────────────────────────────────────────────────
-            MenuSection(title = "Meu ponto") {
-                ProfileMenuRow(icon = Icons.Outlined.Edit,     label = "Solicitar ajuste", sub = "Corrigir uma batida")
-                ProfileMenuRow(icon = Icons.Outlined.CalendarMonth, label = "Solicitar abono",  sub = "Falta justificada, atestado")
-                ProfileMenuRow(icon = Icons.AutoMirrored.Outlined.Logout, label = "Espelho de ponto",  sub = "Baixar PDF do mês", showDivider = false)
+            MenuSection(title = stringResource(R.string.profile_section_my_punch)) {
+                ProfileMenuRow(icon = Icons.Outlined.Edit,     label = stringResource(R.string.profile_request_adjust), sub = stringResource(R.string.profile_request_adjust_sub))
+                ProfileMenuRow(icon = Icons.Outlined.CalendarMonth, label = stringResource(R.string.profile_request_excuse),  sub = stringResource(R.string.profile_request_excuse_sub))
+                ProfileMenuRow(icon = Icons.AutoMirrored.Outlined.Logout, label = stringResource(R.string.profile_punch_mirror),  sub = stringResource(R.string.profile_punch_mirror_sub), showDivider = false)
             }
 
             Spacer(Modifier.height(4.dp))
 
-            MenuSection(title = "Conta") {
-                ProfileMenuRow(icon = Icons.Outlined.Person, label = "Dados pessoais")
+            MenuSection(title = stringResource(R.string.profile_section_account)) {
+                ProfileMenuRow(icon = Icons.Outlined.Person, label = stringResource(R.string.profile_personal_data))
                 ProfileMenuRow(
                     icon = Icons.Outlined.Notifications,
-                    label = "Notificações",
+                    label = stringResource(R.string.profile_notifications),
                     trailing = { PontoToggle(checked = notifications, onCheckedChange = { notifications = it }) },
                 )
                 ProfileMenuRow(
                     icon = Icons.Outlined.Fingerprint,
-                    label = "Acesso por biometria",
+                    label = stringResource(R.string.profile_biometric),
                     trailing = { PontoToggle(checked = biometrics, onCheckedChange = { biometrics = it }) },
                 )
                 ProfileMenuRow(
                     icon = Icons.Outlined.Bedtime,
-                    label = "Tema escuro",
+                    label = stringResource(R.string.profile_dark_mode),
                     showDivider = false,
                     trailing = { PontoToggle(checked = darkMode, onCheckedChange = { darkMode = it }) },
                 )
@@ -199,11 +201,11 @@ fun ProfileScreen(
 
             Spacer(Modifier.height(4.dp))
 
-            MenuSection(title = "Suporte") {
-                ProfileMenuRow(icon = Icons.AutoMirrored.Outlined.HelpOutline, label = "Central de ajuda")
+            MenuSection(title = stringResource(R.string.profile_section_support)) {
+                ProfileMenuRow(icon = Icons.AutoMirrored.Outlined.HelpOutline, label = stringResource(R.string.profile_help_center))
                 ProfileMenuRow(
                     icon = Icons.Outlined.Info,
-                    label = "Sobre o Ponto+",
+                    label = stringResource(R.string.profile_about),
                     sub = "v2.4.1 (build 2026.05)",
                     showDivider = false,
                 )
@@ -228,7 +230,7 @@ fun ProfileScreen(
                     modifier = Modifier.size(18.dp),
                 )
                 Text(
-                    text  = "  Sair da conta",
+                    text  = "  ${stringResource(R.string.profile_logout)}",
                     style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.SemiBold),
                 )
             }

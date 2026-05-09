@@ -48,6 +48,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -60,6 +61,7 @@ import com.telusdigital.pontomais.ui.theme.Pearl
 import com.telusdigital.pontomais.ui.theme.PontoMaisTheme
 import com.telusdigital.pontomais.ui.theme.Slate
 import com.telusdigital.pontomais.ui.theme.TelusPurple
+import com.telusdigital.pontomais.R
 
 private val HeroBrush = Brush.linearGradient(
     colors = listOf(Orchid, TelusPurple),
@@ -101,7 +103,7 @@ fun LoginScreen(onLogin: () -> Unit) {
                 )
                 Spacer(Modifier.height(8.dp))
                 Text(
-                    text  = "BY TELUS DIGITAL",
+                    text  = stringResource(R.string.app_brand_sub),
                     style = MaterialTheme.typography.labelSmall.copy(
                         color         = Color.White.copy(alpha = 0.7f),
                         letterSpacing = 3.52.sp,
@@ -136,7 +138,7 @@ fun LoginScreen(onLogin: () -> Unit) {
                     onValueChange = { email = it },
                     placeholder   = {
                         Text(
-                            "E-mail corporativo",
+                            stringResource(R.string.login_email_label),
                             style = MaterialTheme.typography.bodyMedium.copy(color = Slate),
                         )
                     },
@@ -153,7 +155,7 @@ fun LoginScreen(onLogin: () -> Unit) {
                     onValueChange = { pass = it },
                     placeholder   = {
                         Text(
-                            "Senha",
+                            stringResource(R.string.login_password_label),
                             style = MaterialTheme.typography.bodyMedium.copy(color = Slate),
                         )
                     },
@@ -164,7 +166,7 @@ fun LoginScreen(onLogin: () -> Unit) {
                         IconButton(onClick = { showPw = !showPw }) {
                             Icon(
                                 imageVector        = if (showPw) Icons.Outlined.Visibility else Icons.Outlined.VisibilityOff,
-                                contentDescription = if (showPw) "Ocultar senha" else "Mostrar senha",
+                                contentDescription = if (showPw) stringResource(R.string.login_password_hide) else stringResource(R.string.login_password_show),
                                 tint               = Slate,
                                 modifier           = Modifier.size(20.dp),
                             )
@@ -188,7 +190,7 @@ fun LoginScreen(onLogin: () -> Unit) {
                     modifier = Modifier.fillMaxWidth().height(56.dp),
                 ) {
                     Text(
-                        text  = "Entrar",
+                        text  = stringResource(R.string.login_cta),
                         style = MaterialTheme.typography.labelLarge.copy(
                             fontSize   = 15.sp,
                             fontWeight = FontWeight.SemiBold,
@@ -211,7 +213,7 @@ fun LoginScreen(onLogin: () -> Unit) {
                         )
                         Spacer(Modifier.width(6.dp))
                         Text(
-                            text  = "Biometria",
+                            text  = stringResource(R.string.login_biometric_cta),
                             style = MaterialTheme.typography.labelMedium.copy(
                                 color      = TelusPurple,
                                 fontWeight = FontWeight.SemiBold,
@@ -220,7 +222,7 @@ fun LoginScreen(onLogin: () -> Unit) {
                     }
                     TextButton(onClick = {}) {
                         Text(
-                            text  = "Esqueci a senha",
+                            text  = stringResource(R.string.login_forgot_password),
                             style = MaterialTheme.typography.labelMedium.copy(
                                 color      = Slate,
                                 fontWeight = FontWeight.Medium,

@@ -7,20 +7,21 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
+// Spec §2.4 — semantic aliases mapped to M3 color roles
 private val LightColorScheme = lightColorScheme(
     primary            = TelusPurple,
-    onPrimary          = Color.White,
-    primaryContainer   = Iris,
-    onPrimaryContainer = TelusPurple,
+    onPrimary          = Color.White,          // color/text/on-primary
+    primaryContainer   = Iris,                 // color/bg/accent-soft
+    onPrimaryContainer = TelusPurple,          // color/text/on-accent
 
     secondary            = Orchid,
     onSecondary          = Color.White,
     secondaryContainer   = Verbena,
     onSecondaryContainer = Obsidian,
 
-    tertiary            = Forest,
+    tertiary            = Forest,              // color/state/success
     onTertiary          = Color.White,
-    tertiaryContainer   = Juniper,
+    tertiaryContainer   = Juniper,             // color/bg/success-soft (via Hawthorn alias)
     onTertiaryContainer = Obsidian,
 
     error            = ErrorRed,
@@ -28,24 +29,24 @@ private val LightColorScheme = lightColorScheme(
     errorContainer   = ErrorRedContainer,
     onErrorContainer = OnErrorRedContainer,
 
-    background        = Pearl,
-    onBackground      = Obsidian,
-    surface           = Pearl,
-    onSurface         = Obsidian,
-    surfaceVariant    = Moonstone,
-    onSurfaceVariant  = Slate,
-    outline           = Marble,
-    outlineVariant    = Marble,
-    scrim             = Obsidian,
-    inverseSurface    = Obsidian,
-    inverseOnSurface  = Pearl,
-    inversePrimary    = Iris,
+    background       = Pearl,                  // color/bg/page — scaffold
+    onBackground     = Obsidian,               // color/text/primary
+    surface          = Color.White,            // color/bg/surface — cards
+    onSurface        = Obsidian,
+    surfaceVariant   = Moonstone,
+    onSurfaceVariant = Slate,                  // color/text/secondary
+    outline          = Marble,                 // color/border
+    outlineVariant   = Marble,
+    scrim            = Obsidian,
+    inverseSurface   = Obsidian,
+    inverseOnSurface = Pearl,
+    inversePrimary   = Iris,
 )
 
 private val DarkColorScheme = darkColorScheme(
     primary            = Verbena,
     onPrimary          = TelusPurple,
-    primaryContainer   = TelusPurple,
+    primaryContainer   = PurpleDark,
     onPrimaryContainer = Iris,
 
     secondary            = Verbena,
@@ -53,8 +54,8 @@ private val DarkColorScheme = darkColorScheme(
     secondaryContainer   = OrchidDark,
     onSecondaryContainer = Verbena,
 
-    tertiary            = Juniper,
-    onTertiary          = Color(0xFF003920),
+    tertiary            = TelusGreen,
+    onTertiary          = Obsidian,
     tertiaryContainer   = Forest,
     onTertiaryContainer = Juniper,
 
@@ -63,13 +64,13 @@ private val DarkColorScheme = darkColorScheme(
     errorContainer   = ErrorRedContainer,
     onErrorContainer = OnErrorRedContainer,
 
-    background       = Obsidian,
+    background       = DarkPage,
     onBackground     = Pearl,
-    surface          = Obsidian,
+    surface          = SurfaceDark,
     onSurface        = Pearl,
     surfaceVariant   = SurfaceDark,
     onSurfaceVariant = Galena,
-    outline          = Galena,
+    outline          = Marble,
     outlineVariant   = SurfaceDark,
     inverseSurface   = Pearl,
     inverseOnSurface = Obsidian,

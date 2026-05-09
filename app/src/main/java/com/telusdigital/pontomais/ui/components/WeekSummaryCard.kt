@@ -18,6 +18,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.telusdigital.pontomais.ui.theme.AmberContainer
 import com.telusdigital.pontomais.ui.theme.Juniper
 import com.telusdigital.pontomais.ui.theme.PontoMaisTheme
 
@@ -94,7 +95,7 @@ fun WeekSummaryCard(
             Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
                 MiniStat(label = "Extras",  value = summary.extras,    valueColor = Juniper)
                 MiniStat(label = "Faltas",  value = summary.absences,  valueColor = Color.White.copy(alpha = 0.85f))
-                MiniStat(label = "Atrasos", value = summary.delays,    valueColor = Color(0xFFFFD89E))
+                MiniStat(label = "Atrasos", value = summary.delays,    valueColor = AmberContainer)
             }
         }
     }

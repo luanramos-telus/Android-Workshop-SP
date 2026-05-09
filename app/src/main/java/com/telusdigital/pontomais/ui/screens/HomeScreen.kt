@@ -38,6 +38,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -57,6 +58,7 @@ import com.telusdigital.pontomais.ui.theme.Pearl
 import com.telusdigital.pontomais.ui.theme.PontoMaisTheme
 import com.telusdigital.pontomais.ui.theme.Slate
 import com.telusdigital.pontomais.ui.theme.TelusPurple
+import com.telusdigital.pontomais.R
 import kotlinx.coroutines.delay
 import java.time.LocalDate
 import java.time.LocalTime
@@ -98,7 +100,7 @@ fun HomeScreen(
     Scaffold(
         topBar = {
             PontoTopAppBar(
-                title          = "Olá, Luan",
+                title          = stringResource(R.string.home_greeting, "Luan"),
                 leadingContent = { AvatarInitials("LR") },
                 actions        = { NotificationIconButton(badgeCount = 2) },
             )
@@ -129,15 +131,15 @@ fun HomeScreen(
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
             ) {
                 StatCard(
-                    overline = "HOJE",
+                    overline = stringResource(R.string.home_overline_today),
                     value    = state.workedToday,
-                    sub      = if (isWorking) "em curso" else "trabalhadas",
+                    sub      = if (isWorking) stringResource(R.string.home_worked_in_progress) else stringResource(R.string.home_worked_done),
                     modifier = Modifier.weight(1f),
                 )
                 StatCard(
-                    overline  = "BANCO DE HORAS",
+                    overline  = stringResource(R.string.home_overline_bank),
                     value     = state.hoursBalance,
-                    sub       = "saldo positivo",
+                    sub       = stringResource(R.string.home_balance_positive),
                     trendIcon = Icons.AutoMirrored.Outlined.TrendingUp,
                     modifier  = Modifier.weight(1f),
                     onClick   = { onNavigate(PontoTab.Bank) },
@@ -154,7 +156,7 @@ fun HomeScreen(
                     horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
                     Text(
-                        text  = "Batidas de hoje",
+                        text  = stringResource(R.string.home_punch_list_title),
                         style = MaterialTheme.typography.titleSmall.copy(
                             fontWeight = FontWeight.Bold,
                             color      = Obsidian,
@@ -165,7 +167,7 @@ fun HomeScreen(
                         contentPadding = PaddingValues(horizontal = 4.dp),
                     ) {
                         Text(
-                            text  = "Ver histórico",
+                            text  = stringResource(R.string.home_punch_list_see_history),
                             style = MaterialTheme.typography.bodySmall.copy(color = TelusPurple),
                         )
                         Icon(
@@ -188,7 +190,7 @@ fun HomeScreen(
                 ) {
                     if (visiblePunches.isEmpty()) {
                         Text(
-                            text     = "Nenhuma batida registrada ainda.",
+                            text     = stringResource(R.string.home_punch_list_empty),
                             style    = MaterialTheme.typography.bodySmall.copy(color = Slate),
                             modifier = Modifier.padding(horizontal = 16.dp, vertical = 32.dp),
                         )

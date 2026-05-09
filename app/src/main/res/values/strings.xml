@@ -1,3 +1,119 @@
 <resources>
     <string name="app_name">Ponto+</string>
+    <string name="app_brand_sub">BY TELUS DIGITAL</string>
+
+    <!-- ── Login ──────────────────────────────────────────────────── -->
+    <string name="login_email_label">E-mail corporativo</string>
+    <string name="login_password_label">Senha</string>
+    <string name="login_password_hide">Ocultar senha</string>
+    <string name="login_password_show">Mostrar senha</string>
+    <string name="login_cta">Entrar</string>
+    <string name="login_biometric_cta">Biometria</string>
+    <string name="login_forgot_password">Esqueci a senha</string>
+
+    <!-- ── Bottom navigation ──────────────────────────────────────── -->
+    <string name="nav_home">Bater ponto</string>
+    <string name="nav_bank">Banco</string>
+    <string name="nav_profile">Perfil</string>
+
+    <!-- ── Home ───────────────────────────────────────────────────── -->
+    <string name="home_greeting">Olá, %1$s</string>
+    <string name="home_overline_today">HOJE</string>
+    <string name="home_overline_bank">BANCO DE HORAS</string>
+    <string name="home_worked_in_progress">em curso</string>
+    <string name="home_worked_done">trabalhadas</string>
+    <string name="home_balance_positive">saldo positivo</string>
+    <string name="home_punch_list_title">Batidas de hoje</string>
+    <string name="home_punch_list_see_history">Ver histórico</string>
+    <string name="home_punch_list_empty">Nenhuma batida registrada ainda.</string>
+    <string name="home_punch_button">Bater ponto</string>
+
+    <!-- ── History ────────────────────────────────────────────────── -->
+    <string name="history_title">Histórico</string>
+    <string name="history_filter_this_week">Esta semana</string>
+    <string name="history_filter_this_month">Este mês</string>
+    <string name="history_filter_custom">Personalizado</string>
+
+    <!-- ── Bank ───────────────────────────────────────────────────── -->
+    <string name="bank_title">Banco de horas</string>
+    <string name="bank_balance_overline">SALDO ATUAL</string>
+    <string name="bank_balance_unit">horas</string>
+    <string name="bank_request_vacation">Solicitar folga</string>
+    <string name="bank_see_projection">Ver projeção</string>
+    <string name="bank_cycle_overline">CICLO ATUAL</string>
+    <string name="bank_cycle_limit">Limite 40h</string>
+    <string name="bank_movements_title">Movimentações</string>
+    <string name="bank_movements_see_all">Ver todas</string>
+
+    <!-- ── Profile ────────────────────────────────────────────────── -->
+    <string name="profile_title">Perfil</string>
+    <string name="profile_settings_cd">Configurações</string>
+    <string name="profile_quick_id_label">Matrícula</string>
+    <string name="profile_quick_hire_label">Admissão</string>
+    <string name="profile_quick_team_label">Equipe</string>
+
+    <string name="profile_section_my_punch">Meu ponto</string>
+    <string name="profile_request_adjust">Solicitar ajuste</string>
+    <string name="profile_request_adjust_sub">Corrigir uma batida</string>
+    <string name="profile_request_excuse">Solicitar abono</string>
+    <string name="profile_request_excuse_sub">Falta justificada, atestado</string>
+    <string name="profile_punch_mirror">Espelho de ponto</string>
+    <string name="profile_punch_mirror_sub">Baixar PDF do mês</string>
+
+    <string name="profile_section_reminders">Lembretes</string>
+    <string name="profile_reminder_label">Lembrete de batida</string>
+    <string name="profile_reminder_summary_active">Avisa %1$d min antes das %2$s</string>
+    <string name="profile_reminder_summary_on_time">Avisa às %1$s</string>
+    <string name="profile_reminder_summary_off">Desativado</string>
+
+    <string name="profile_section_account">Conta</string>
+    <string name="profile_personal_data">Dados pessoais</string>
+    <string name="profile_notifications">Notificações</string>
+    <string name="profile_biometric">Acesso por biometria</string>
+    <string name="profile_dark_mode">Tema escuro</string>
+
+    <string name="profile_section_support">Suporte</string>
+    <string name="profile_help_center">Central de ajuda</string>
+    <string name="profile_about">Sobre o Ponto+</string>
+
+    <string name="profile_logout">Sair da conta</string>
+
+    <!-- ── Reminder config ────────────────────────────────────────── -->
+    <string name="reminder_screen_title">Lembrete de batida</string>
+    <string name="reminder_daily_label">Lembrete diário</string>
+    <string name="reminder_time_label">Horário</string>
+    <string name="reminder_time_hint">Toque para alterar</string>
+    <string name="reminder_lead_label">Avisar com antecedência</string>
+    <string name="reminder_lead_on_time">No horário</string>
+    <string name="reminder_lead_minutes_before">%1$d min antes</string>
+    <string name="reminder_stepper_time_title">Horário do lembrete</string>
+    <string name="reminder_save">Salvar</string>
+    <string name="reminder_cancel">Cancelar</string>
+    <string name="reminder_saved_snackbar">Lembrete salvo!</string>
+    <string name="reminder_discard_title">Descartar alterações?</string>
+    <string name="reminder_discard_body">As alterações não salvas serão perdidas.</string>
+    <string name="reminder_discard_confirm">Descartar</string>
+    <string name="reminder_discard_dismiss">Continuar editando</string>
+
+    <!-- Notification -->
+    <string name="notif_channel_name">Lembretes de batida</string>
+    <string name="notif_channel_desc">Lembrete diário de batida de ponto</string>
+    <string name="notif_title_lead">Faltam %1$d min para bater o ponto</string>
+    <string name="notif_title_now">Hora de bater o ponto</string>
+    <string name="notif_body">Não esqueça de bater seu ponto às %1$s.</string>
+    <string name="notif_action_punch">Bater ponto</string>
+    <string name="notif_action_snooze">Lembrar em 5 min</string>
+
+    <!-- Permission rationale -->
+    <string name="perm_notif_title">Ative as notificações</string>
+    <string name="perm_notif_body">Para te avisar antes de cada batida, o Ponto+ precisa enviar notificações.</string>
+    <string name="perm_notif_allow">Permitir</string>
+    <string name="perm_notif_later">Agora não</string>
+
+    <!-- ── Common ──────────────────────────────────────────────────── -->
+    <string name="cd_back">Voltar</string>
+    <string name="cd_increase">Aumentar</string>
+    <string name="cd_decrease">Diminuir</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancelar</string>
 </resources>
