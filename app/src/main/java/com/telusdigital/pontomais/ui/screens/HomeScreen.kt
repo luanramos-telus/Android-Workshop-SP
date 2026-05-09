@@ -89,8 +89,11 @@ fun HomeScreen(
 
     val isWorking = state.punches.isNotEmpty() && state.punches.last().type != PunchType.Out
 
-    // Every tap adds a row — Entrada, Início pausa, Volta pausa, Saída.
-    val visiblePunches = state.punches
+    // Only show Entrada (first In) and Saída (last Out) in the summary list.
+    val visiblePunches = buildList {
+        state.punches.firstOrNull { it.type == PunchType.In }?.let { add(it) }
+        state.punches.lastOrNull { it.type == PunchType.Out }?.let { add(it) }
+    }
 
     Scaffold(
         topBar = {

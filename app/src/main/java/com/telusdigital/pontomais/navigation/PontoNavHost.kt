@@ -29,7 +29,8 @@ private fun PontoTab.route() = when (this) {
 }
 
 @Composable
-fun PontoNavHost(
+fun
+        PontoNavHost(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
 ) {
