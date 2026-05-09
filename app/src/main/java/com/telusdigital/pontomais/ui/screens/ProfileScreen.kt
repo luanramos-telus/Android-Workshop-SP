@@ -146,7 +146,7 @@ fun ProfileScreen(
                                     modifier = Modifier.size(11.dp),
                                 )
                                 Text(
-                                    text  = "TELUS Digital · Porto Alegre",
+                                    text  = "TELUS Digital · São Paulo",
                                     style = MaterialTheme.typography.labelSmall.copy(
                                         color = TelusPurple,
                                         fontWeight = FontWeight.SemiBold,
