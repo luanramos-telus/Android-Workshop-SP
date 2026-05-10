@@ -17,6 +17,14 @@ Together they cover ~95% of what you'd otherwise grep for. Skim them first, then
 - All UI copy is pt-BR in `app/src/main/res/values/strings.xml`. Brand fonts: `HnTelusSa` + `HnTelusSaDisplay` (in `res/font/`).
 - Brand colors live in `ui/theme/Color.kt`. The hero gradient is `CaradonnaBrush` (Orchid → TelusPurple) in `ui/components/GradientCard.kt`.
 
+## Specialized agents
+
+- **`ac-validator`** (Haiku, read-only) — validates that code on the current branch satisfies the Acceptance Criteria of a Jira issue. Defined at `.claude/agents/ac-validator.md`.
+
+  **Invoke it whenever the user asks to validate / review / confirm ACs against a Jira ticket** — e.g. "validate AC for ABC-123", "check if PROJ-45 is done", "review the ACs of ticket X", or when wrapping up work that maps to a known Jira key. Don't validate ACs inline yourself — delegate to this agent so the work runs on Haiku and stays scoped to a single read-only review pass.
+
+  Call it via the Agent tool with `subagent_type: "ac-validator"`. Pass the Jira key (and base branch, if not `main`) in the prompt. The agent returns a per-AC PASS/PARTIAL/FAIL/NOT_VERIFIABLE report with `file:line` evidence — relay its summary to the user.
+
 ## Working conventions
 
 - Component composables take primitives + lambdas (no ViewModels) so they stay previewable. Every component file has at least one `@Preview` — open it to see states before re-implementing.
