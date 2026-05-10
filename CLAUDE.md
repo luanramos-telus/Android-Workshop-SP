@@ -25,6 +25,28 @@ Together they cover ~95% of what you'd otherwise grep for. Skim them first, then
 
   Call it via the Agent tool with `subagent_type: "ac-validator"`. Pass the Jira key (and base branch, if not `main`) in the prompt. The agent returns a per-AC PASS/PARTIAL/FAIL/NOT_VERIFIABLE report with `file:line` evidence — relay its summary to the user.
 
+## Jira workflow
+
+When the session's work is tied to a Jira ticket (key like `ABC-123`, given by the user or unambiguously inferable from the current branch / commit subjects), follow this lifecycle. Transitions go through `mcp__claude_ai_Atlassian__transitionJiraIssue` — resolve `cloudId` via `getAccessibleAtlassianResources` and the correct transition id via `getTransitionsForJiraIssue`.
+
+1. **Starting work — auto-move To Do → In Progress.** Before making the first code change, transition the ticket from **To Do** to **In Progress**. This is pre-authorized by these instructions; do not ask first. If the ticket is already In Progress (or further along), skip silently and continue. If it sits in a status that is *not* the standard backlog (e.g. Blocked, In Review), stop and ask the user how to proceed instead of guessing.
+
+2. **Finishing work — validate, then ask before publishing.** After the implementation is complete:
+   - Delegate AC validation to the **`ac-validator`** agent (see "Specialized agents"). The agent is read-only — it cannot transition or comment.
+   - Once the agent reports back, summarize the verdict for the user, then **stop and ask** in plain words, e.g. *"ACs validated. Want me to create the PR and move `<KEY>` to In Review?"*
+   - Only on an explicit user "yes" (this turn — prior approvals don't carry over):
+     a. Create the PR following the standard PR-creation flow in this repo.
+     b. Transition the ticket to **In Review**.
+   - If the AC validator returns FAIL or PARTIAL, surface that and do **not** offer the PR/transition step — fix the gap first, or ask the user how to proceed.
+
+3. **Never auto-advance past In Review.** Code Review, Done, Closed, Released, etc. are owned by humans and CI. Do not move tickets further without an explicit, unambiguous instruction in the same turn.
+
+4. **Failures are stopping events.** If a transition call fails (permission denied, transition id not available from the current status, workflow mismatch), report the exact error and stop. Do not retry, do not pick a different transition, do not invent a fallback path.
+
+## Skills
+
+- **`claude-design-spec`** — invoke whenever a task touches the design system: theming tokens, typography, gradients, spacing, shapes, or any visual/UI change expected to follow the Ponto+ Theming Spec. Use it via `/claude-design-spec` (or the Skill tool with `skill: "claude-design-spec"`) **before** modifying anything under `app/src/main/java/com/telusdigital/pontomais/ui/theme/` or `…/ui/components/`, and **before** adding new screens, so the change stays consistent with `DESIGN_SYSTEM.md`. If the skill flags a deviation, surface it in the response and pause until the user confirms.
+
 ## Working conventions
 
 - Component composables take primitives + lambdas (no ViewModels) so they stay previewable. Every component file has at least one `@Preview` — open it to see states before re-implementing.
