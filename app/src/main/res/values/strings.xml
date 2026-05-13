@@ -109,6 +109,13 @@
     <string name="perm_notif_body">Para te avisar antes de cada batida, o Ponto+ precisa enviar notificações.</string>
     <string name="perm_notif_allow">Permitir</string>
     <string name="perm_notif_later">Agora não</string>
+    <string name="perm_notif_denied_title">Notificações bloqueadas</string>
+    <string name="perm_notif_denied_body">As notificações estão bloqueadas no sistema. Abra as configurações do app para liberar.</string>
+    <string name="perm_notif_open_settings">Abrir Configurações</string>
+
+    <!-- Reminder: missing permission banner -->
+    <string name="reminder_no_permission_banner">Sem permissão para notificações</string>
+    <string name="reminder_no_permission_cta">Abrir Configurações</string>
 
     <!-- ── Common ──────────────────────────────────────────────────── -->
     <string name="cd_back">Voltar</string>

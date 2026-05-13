@@ -24,6 +24,7 @@ import androidx.compose.material.icons.outlined.Fingerprint
 import androidx.compose.material.icons.automirrored.outlined.HelpOutline
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Notifications
+import androidx.compose.material.icons.outlined.NotificationsActive
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.ButtonDefaults
@@ -35,6 +36,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -42,11 +44,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.telusdigital.pontomais.R
+import com.telusdigital.pontomais.data.ReminderPreferences
+import com.telusdigital.pontomais.reminder.ReminderConfig
 import com.telusdigital.pontomais.ui.components.GradientCard
 import com.telusdigital.pontomais.ui.components.PontoBottomNavBar
 import com.telusdigital.pontomais.ui.components.PontoTab
@@ -67,11 +72,17 @@ fun ProfileScreen(
     onNavigate: (PontoTab) -> Unit,
     onBack: () -> Unit = {},
     onLogout: () -> Unit = {},
+    onOpenReminder: () -> Unit = {},
     currentTab: PontoTab = PontoTab.Profile,
 ) {
     var notifications by remember { mutableStateOf(true) }
     var biometrics    by remember { mutableStateOf(true) }
     var darkMode      by remember { mutableStateOf(false) }
+
+    val context = LocalContext.current
+    val reminderPrefs = remember(context) { ReminderPreferences(context.applicationContext) }
+    val reminderConfig by reminderPrefs.config.collectAsState(initial = ReminderConfig())
+    val reminderSub = reminderSubtitle(reminderConfig)
 
     Scaffold(
         topBar = {
@@ -179,6 +190,18 @@ fun ProfileScreen(
 
             Spacer(Modifier.height(4.dp))
 
+            MenuSection(title = stringResource(R.string.profile_section_reminders)) {
+                ProfileMenuRow(
+                    icon = Icons.Outlined.NotificationsActive,
+                    label = stringResource(R.string.profile_reminder_label),
+                    sub = reminderSub,
+                    showDivider = false,
+                    onClick = onOpenReminder,
+                )
+            }
+
+            Spacer(Modifier.height(4.dp))
+
             MenuSection(title = stringResource(R.string.profile_section_account)) {
                 ProfileMenuRow(icon = Icons.Outlined.Person, label = stringResource(R.string.profile_personal_data))
                 ProfileMenuRow(
@@ -237,6 +260,16 @@ fun ProfileScreen(
 
             Spacer(Modifier.height(24.dp))
         }
+    }
+}
+
+@Composable
+private fun reminderSubtitle(cfg: ReminderConfig): String {
+    val timeStr = "%02d:%02d".format(cfg.hour, cfg.minute)
+    return when {
+        !cfg.enabled       -> stringResource(R.string.profile_reminder_summary_off)
+        cfg.leadMin == 0   -> stringResource(R.string.profile_reminder_summary_on_time, timeStr)
+        else               -> stringResource(R.string.profile_reminder_summary_active, cfg.leadMin, timeStr)
     }
 }
 

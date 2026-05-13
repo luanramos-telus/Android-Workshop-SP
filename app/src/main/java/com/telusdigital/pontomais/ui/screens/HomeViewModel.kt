@@ -1,7 +1,9 @@
 package com.telusdigital.pontomais.ui.screens
 
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.telusdigital.pontomais.reminder.ReminderScheduler
 import com.telusdigital.pontomais.ui.components.PunchEntry
 import com.telusdigital.pontomais.ui.components.PunchType
 import kotlinx.coroutines.delay
@@ -30,7 +32,7 @@ data class HomeUiState(
     val hoursBalance: String = "+12:38",
 )
 
-class HomeViewModel : ViewModel() {
+class HomeViewModel(app: Application) : AndroidViewModel(app) {
 
     private val records = mutableListOf<PunchRecord>()
 
@@ -54,6 +56,9 @@ class HomeViewModel : ViewModel() {
 
         records += PunchRecord(type = nextType, time = LocalTime.now(), synced = false)
         refreshState()
+
+        // Cancel today's pending reminder — the user has already punched. (AC 5)
+        viewModelScope.launch { ReminderScheduler.cancelToday(getApplication()) }
 
         viewModelScope.launch {
             delay(1_200)

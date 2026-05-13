@@ -12,13 +12,15 @@ import com.telusdigital.pontomais.ui.screens.HistoryScreen
 import com.telusdigital.pontomais.ui.screens.HomeScreen
 import com.telusdigital.pontomais.ui.screens.LoginScreen
 import com.telusdigital.pontomais.ui.screens.ProfileScreen
+import com.telusdigital.pontomais.ui.screens.reminder.ReminderConfigScreen
 
 object Routes {
-    const val Login   = "login"
-    const val Home    = "home"
-    const val History = "history"
-    const val Bank    = "bank"
-    const val Profile = "profile"
+    const val Login    = "login"
+    const val Home     = "home"
+    const val History  = "history"
+    const val Bank     = "bank"
+    const val Profile  = "profile"
+    const val Reminder = "reminder"
 }
 
 private fun PontoTab.route() = when (this) {
@@ -75,8 +77,13 @@ fun
                         popUpTo(Routes.Login) { inclusive = true }
                     }
                 },
+                onOpenReminder = { navController.navigate(Routes.Reminder) },
                 currentTab = PontoTab.Profile,
             )
+        }
+
+        composable(Routes.Reminder) {
+            ReminderConfigScreen(onBack = { navController.popBackStack() })
         }
     }
 }
